@@ -1,33 +1,42 @@
 
-var sdk =window.sdk ||{};
-function daywork() {
-    var formatcontex= executionContext.getFormContext(); 
-    var date = formatcontex.getAttribute('createdon').getValue(); 
-    alert(date); 
-}
-     
-
-     
-
-function daysestimate(date, days) 
-        {
-        days= 3; 
-        var date= formContext.getAttribute('createdon').getValue();
-        var result= new Date (date); 
-        result.setDate(result.getDate()+ days)
-        return result; 
-         alert(result);
-        }
-
+////////////////////////////////////////////////
+//author: Ing. Jency Roca  date:26-08-2020
+//Dependencies: moment.js //event:Onchange sales Deparment
+var IntelDay = window.sdk  || {};
+function dayWork(executionContext) {
+    var newDate; 
     
+    var formatcontext= executionContext.getFormContext(); 
+    var date = formatcontext.getAttribute('createdon').getValue();
+    var eDate=formatcontext.getAttribute('intel_dateestimate').getValue();
+    if (eDate!=null) { 
+        if (date===null) {
+            var d =  Date.now(); 
+            console.log("FECHA DE HOY", d); 
+            date = d; 
+        }
+            var x = moment(date).format('dddd');
+            if (x==="Wednesday" || x==="Thursday" || x==="Friday") {
+               newDate= moment(date).add('days', 5).format();
+            } else{
+                newDate= moment(date).add('days', 3).format();
+            }
+          
+            var dayFormat= new Date (newDate); 
+            
+            formatcontext.getAttribute('intel_dateestimate').setValue(dayFormat);
+             
+        
+            console.log('**************************************************');
+            console.log('CRM FECHA', date, typeof(date));
+            console.log ('FORMATEADA FECHA', newDate); 
+           
+            console.log('**************************************************');
+        
+        
+    
+        }    
+    }
 
-function BusinessDays(d, n) {
-    // *** d = a date 
-    // *** n = number of working days to increment by
-     d = new Date(d.getTime());
-     var day = d.getDay();
-     d.setDate(d.getDate() + n + (day === 6 ? 2 : +!day) + (Math.floor((n - 1 + (day % 6 || 1)) / 5) * 2));
-    return d;
-   } // End function
-   
-   
+
+
